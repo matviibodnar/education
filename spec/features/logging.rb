@@ -12,8 +12,6 @@ RSpec.feature 'Home Page', type: :feature do
 
     LogUtils.login
 
-    p page.text
-
     expect(page).to have_text(Texts::MAIN_PAGE)
   end
 
