@@ -7,6 +7,7 @@ on:
   pull_request:
     branches:
       - main
+  workflow_dispatch:  
 
 jobs:
   test:
@@ -24,15 +25,13 @@ jobs:
     - name: Install dependencies
       run: |
         gem install bundler
-        bundle install  # Устанавливаем зависимости из Gemfile
+        bundle install  
 
     - name: Install Google Chrome and ChromeDriver
       run: |
-        # Установка Google Chrome
         sudo apt-get update
         sudo apt-get install -y google-chrome-stable
 
-        # Установка ChromeDriver
         CHROME_DRIVER_VERSION=$(curl -sS https://chromedriver.storage.googleapis.com/LATEST_RELEASE)
         wget https://chromedriver.storage.googleapis.com/$CHROME_DRIVER_VERSION/chromedriver_linux64.zip
         unzip chromedriver_linux64.zip
@@ -42,18 +41,16 @@ jobs:
 
     - name: Install Allure
       run: |
-        # Install Allure CLI
         curl -sL https://github.com/allure-framework/allure2/releases/download/2.16.1/allure-2.16.1.zip -o allure.zip
         unzip allure.zip -d allure
         sudo mv allure /opt/allure
         sudo ln -s /opt/allure/bin/allure /usr/local/bin/allure
-        allure --version  # Check if Allure is installed correctly
+        allure --version
 
     - name: Run RSpec tests with Allure formatter
       run: |
-        bundle exec rspec ./spec/features/*
-      continue-on-error: true 
-      
+        bundle exec rspec ./spec/features/* --format AllureRspecFormatter --out allure-results
+
     - name: Generate Allure report
       run: |
         allure generate allure-results --clean -o allure-report
