@@ -40,10 +40,19 @@ jobs:
         sudo chown root:root /usr/local/bin/chromedriver
         sudo chmod +x /usr/local/bin/chromedriver
 
+    - name: Install Allure
+      run: |
+        # Install Allure CLI
+        curl -sL https://github.com/allure-framework/allure2/releases/download/2.16.1/allure-2.16.1.zip -o allure.zip
+        unzip allure.zip -d allure
+        sudo mv allure /opt/allure
+        sudo ln -s /opt/allure/bin/allure /usr/local/bin/allure
+        allure --version  # Check if Allure is installed correctly
+
     - name: Run RSpec tests with Allure formatter
       run: |
         bundle exec rspec ./spec/features/* --format AllureRspecFormatter --out allure-results
-      continue-on-error: true
+      continue-on-error: true  # Continue if there are test failures
 
     - name: Generate Allure report
       run: |
