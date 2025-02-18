@@ -19,28 +19,28 @@ jobs:
     - name: Set up Ruby
       uses: ruby/setup-ruby@v1
       with:
-        ruby-version: '3.4' 
-        
+        ruby-version: '3.4'
+
     - name: Install dependencies
       run: |
         gem install bundler
-        bundle install  
-        
+        bundle install  # Устанавливаем зависимости из Gemfile
+
     - name: Install Allure
       run: |
         curl -sL https://github.com/allure-framework/allure2/releases/download/2.16.1/allure-2.16.1.zip -o allure.zip
         unzip allure.zip -d allure
         sudo mv allure /opt/allure
         sudo ln -s /opt/allure/bin/allure /usr/local/bin/allure
+        # Проверяем версию Allure, чтобы убедиться, что установка прошла успешно
+        allure --version
 
-    - name: Install Chrome and ChromeDriver
+    - name: Install Google Chrome and ChromeDriver
       run: |
-        # Установка Google Chrome
         wget https://dl.google.com/linux/direct/google-chrome-stable_current_amd64.deb
         sudo dpkg -i google-chrome-stable_current_amd64.deb
         sudo apt --fix-broken install -y
 
-        # Установка ChromeDriver
         CHROME_DRIVER_VERSION=$(curl -sS https://chromedriver.storage.googleapis.com/LATEST_RELEASE)
         wget https://chromedriver.storage.googleapis.com/$CHROME_DRIVER_VERSION/chromedriver_linux64.zip
         unzip chromedriver_linux64.zip
@@ -51,7 +51,6 @@ jobs:
     - name: Run tests with RSpec and Allure
       run: |
         bundle exec rspec ./spec/features/* --out allure-results
-      continue-on-error: true
 
     - name: Generate Allure report
       run: |
