@@ -1,4 +1,4 @@
-name: Ruby Tests with Allure
+name: Ruby Tests with RSpec and Allure
 
 on:
   push:
@@ -26,13 +26,9 @@ jobs:
         gem install bundler
         bundle install  
         
-    - name: Install Allure
-      run: |
-        sudo apt-get update
-        sudo apt-get install -y allure
-
     - name: Install Google Chrome and ChromeDriver
       run: |
+        sudo apt-get update
         sudo apt-get install -y google-chrome-stable
 
         CHROME_DRIVER_VERSION=$(curl -sS https://chromedriver.storage.googleapis.com/LATEST_RELEASE)
@@ -42,9 +38,9 @@ jobs:
         sudo chown root:root /usr/local/bin/chromedriver
         sudo chmod +x /usr/local/bin/chromedriver
 
-    - name: Run tests with RSpec and Allure
+    - name: Run tests with RSpec and Allure formatter
       run: |
-        bundle exec rspec ./spec/features/* --out allure-results
+        bundle exec rspec ./spec/features/* --format AllureRspecFormatter --out allure-results
 
     - name: Generate Allure report
       run: |
