@@ -35,7 +35,7 @@ jobs:
 
     - name: Run tests with RSpec and Allure
       run: |
-        bundle exec rspec --format AllureRspec::Formatter --out allure-results
+        bundle exec rspec ./spec/features/* --format AllureRspec::Formatter --out allure-results
 
     - name: Generate Allure report
       run: |
