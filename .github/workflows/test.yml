@@ -19,12 +19,12 @@ jobs:
     - name: Set up Ruby
       uses: ruby/setup-ruby@v1
       with:
-        ruby-version: '3.4'
+        ruby-version: '3.4'  # Specify the Ruby version you're using
 
     - name: Install dependencies
       run: |
         gem install bundler
-        bundle install
+        bundle install  # Install Ruby dependencies from Gemfile
 
     - name: Install Allure
       run: |
@@ -35,7 +35,7 @@ jobs:
 
     - name: Run tests with RSpec and Allure
       run: |
-        bundle exec rspec ./spec/features/* 
+        bundle exec rspec ./spec/features/* --out allure-results
 
     - name: Generate Allure report
       run: |
