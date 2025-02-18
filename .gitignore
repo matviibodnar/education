@@ -1,0 +1,10 @@
+
+*.gem
+.bundle/
+log/*
+tmp/*
+*.rbc
+*.sassc
+*.swp
+
+report/
