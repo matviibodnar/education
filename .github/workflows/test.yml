@@ -50,7 +50,7 @@ jobs:
 
     - name: Run tests with RSpec and Allure
       run: |
-        bundle exec rspec ./spec/features/* --out allure-results
+        bundle exec rspec ./spec/features/* 
         continue-on-error: true
 
     - name: Generate Allure report
