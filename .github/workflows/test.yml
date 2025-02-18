@@ -13,24 +13,20 @@ jobs:
     runs-on: ubuntu-latest
 
     steps:
-    # Step 1: Checkout the code from the repository
     - name: Checkout code
       uses: actions/checkout@v2
 
-    # Step 2: Set up Ruby (using ruby/setup-ruby)
     - name: Set up Ruby
       uses: ruby/setup-ruby@v1
       with:
-        ruby-version: '3.0'  # Specify the correct Ruby version
-        bundler-cache: true  # This caches the gems for faster builds
+        ruby-version: '3.0'
+        bundler-cache: true
 
-    # Step 3: Install dependencies via Bundler
     - name: Install dependencies
       run: |
-        gem install bundler  # Explicitly install Bundler
-        bundle install  # Install gems from Gemfile
+        gem install bundler
+        bundle install
 
-    # Step 4: Install Allure
     - name: Install Allure
       run: |
         curl -sL https://github.com/allure-framework/allure2/releases/download/2.16.1/allure-2.16.1.zip -o allure.zip
@@ -38,19 +34,16 @@ jobs:
         sudo mv allure /opt/allure
         sudo ln -s /opt/allure/bin/allure /usr/local/bin/allure
 
-    # Step 5: Run tests with RSpec and Allure
     - name: Run tests with RSpec and Allure
       run: |
         bundle exec rspec --format AllureRspec::Formatter --out allure-results
 
-    # Step 6: Generate Allure report
     - name: Generate Allure report
       run: |
         allure generate allure-results --clean -o allure-report
 
-    # Step 7: Upload Allure report as an artifact
     - name: Upload Allure report as artifact
-      uses: actions/upload-artifact@v3
+      uses: actions/upload-artifact@v4
       with:
         name: allure-report
         path: allure-report
