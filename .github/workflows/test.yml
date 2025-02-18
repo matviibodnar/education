@@ -24,22 +24,16 @@ jobs:
     - name: Install dependencies
       run: |
         gem install bundler
-        bundle install  # Устанавливаем зависимости из Gemfile
-
+        bundle install  
+        
     - name: Install Allure
       run: |
-        curl -sL https://github.com/allure-framework/allure2/releases/download/2.16.1/allure-2.16.1.zip -o allure.zip
-        unzip allure.zip -d allure
-        sudo mv allure /opt/allure
-        sudo ln -s /opt/allure/bin/allure /usr/local/bin/allure
-        # Проверяем версию Allure, чтобы убедиться, что установка прошла успешно
-        allure --version
+        sudo apt-get update
+        sudo apt-get install -y allure
 
     - name: Install Google Chrome and ChromeDriver
       run: |
-        wget https://dl.google.com/linux/direct/google-chrome-stable_current_amd64.deb
-        sudo dpkg -i google-chrome-stable_current_amd64.deb
-        sudo apt --fix-broken install -y
+        sudo apt-get install -y google-chrome-stable
 
         CHROME_DRIVER_VERSION=$(curl -sS https://chromedriver.storage.googleapis.com/LATEST_RELEASE)
         wget https://chromedriver.storage.googleapis.com/$CHROME_DRIVER_VERSION/chromedriver_linux64.zip
