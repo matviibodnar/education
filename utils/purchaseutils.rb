@@ -50,4 +50,27 @@ module PurchaseUtils
   def self.finish
     Capybara.click_button 'Finish'
   end
+
+  def self.find_all_selector(selector, type)
+    elements = []
+
+    if type == 'number'
+      Capybara.all(selector).each do |element|
+        new_element = PurchaseUtils.extract_number(element.text.strip)
+        elements << new_element
+      end
+    elsif type == 'string'
+      Capybara.all(selector).each do |element|
+        new_element = element.text.strip
+        elements << new_element
+      end
+    end
+
+    elements
+  end
+
+  def self.sortinglist(selector)
+    select = Capybara.find('select.product_sort_container')
+    select.select(selector)
+  end
 end
