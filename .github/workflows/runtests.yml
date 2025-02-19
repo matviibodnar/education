@@ -7,7 +7,6 @@ on:
   pull_request:
     branches:
       - main
-  workflow_dispatch:
 
 jobs:
   test:
@@ -25,21 +24,17 @@ jobs:
     - name: Install dependencies
       run: |
         gem install bundler
-        bundle install  # Устанавливаем зависимости из Gemfile
+        bundle install 
 
-    - name: Install Google Chrome and ChromeDriver
+    - name: Install Homebrew
       run: |
-        # Установка Google Chrome
-        sudo apt-get update
-        sudo apt-get install -y google-chrome-stable
-
-        # Установка ChromeDriver
-        CHROME_DRIVER_VERSION=$(curl -sS https://chromedriver.storage.googleapis.com/LATEST_RELEASE)
-        wget https://chromedriver.storage.googleapis.com/$CHROME_DRIVER_VERSION/chromedriver_linux64.zip
-        unzip chromedriver_linux64.zip
-        sudo mv chromedriver /usr/local/bin/chromedriver
-        sudo chown root:root /usr/local/bin/chromedriver
-        sudo chmod +x /usr/local/bin/chromedriver
+        /bin/bash -c "$(curl -fsSL https://raw.githubusercontent.com/Homebrew/install/HEAD/install.sh)"
+      
+    - name: Install Allure and Google Chrome via Homebrew
+      run: |
+        brew install --cask google-chrome
+        
+        brew install allure
 
     - name: Run RSpec tests with Allure formatter
       run: |
@@ -49,6 +44,7 @@ jobs:
     - name: Generate Allure report
       run: |
         allure generate allure-results --clean -o allure-report
+      continue-on-error: true
 
     - name: Upload Allure report as artifact
       uses: actions/upload-artifact@v4
