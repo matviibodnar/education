@@ -1,13 +1,9 @@
-name: Run with RSpec and Allure
+name: Run Selenium Tests with RSpec and Allure
 
 on:
   push:
     branches:
       - main
-  pull_request:
-    branches:
-      - main
-  workflow_dispatch:
 
 jobs:
   test:
@@ -55,7 +51,7 @@ jobs:
           bundle exec rspec --tag ~slow --allure-results
 
       - name: Upload Allure results
-        uses: actions/upload-artifact@v2
+        uses: actions/upload-artifact@v3
         with:
           name: allure-results
           path: report/allure-results
