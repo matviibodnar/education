@@ -1,0 +1,38 @@
+name: RSpec Test Workflow
+
+on:
+  push:
+    branches:
+      - main
+  pull_request:
+    branches:
+      - main
+  workflow_dispatch:
+
+jobs:
+  test:
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v3
+
+      - name: Set up Ruby
+        uses: ruby/setup-ruby@v1
+        with:
+          ruby-version: '3.4' 
+
+      - name: Install dependencies
+        run: |
+          gem install bundler
+          bundle install
+
+      - name: Run RSpec tests
+        run: bundle exec rspec
+
+      - name: Upload RSpec Results
+        if: always()
+        uses: actions/upload-artifact@v3
+        with:
+          name: rspec-results
+          path: tmp/rspec_results.xml  
