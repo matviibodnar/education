@@ -40,5 +40,15 @@ jobs:
           sudo chown root:root /usr/local/bin/chromedriver
           sudo chmod +x /usr/local/bin/chromedriver
           
+      - name: Set up headless Chrome for RSpec
+        run: |
+          echo "export DISPLAY=:99.0" >> $GITHUB_ENV  # Set DISPLAY for headless mode
+          sudo apt-get update
+          sudo apt-get install -y libx11-dev libnss3 libatk1.0-0 libatk-bridge2.0-0 \
+            libxcomposite1 libxrandr2 libgbm1 libappindicator3-1 libxtst6 \
+            xdg-utils fonts-liberation libdbusmenu-glib4 libdbusmenu-gtk3-4
+
+          sudo apt-get install -y libasound2-plugins
+
       - name: Run RSpec tests
         run: bundle exec rspec ./spec/features/*
