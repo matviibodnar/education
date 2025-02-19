@@ -14,6 +14,7 @@ Capybara.register_driver :chrome do |app|
   options = Selenium::WebDriver::Chrome::Options.new
   options.add_argument('--no-sandbox')
   options.add_argument('--disable-dev-shm-usage')
+  options.add_argument('--user-data-dir=/tmp/chrome-test-profile')
 
   Capybara::Selenium::Driver.new(app, browser: :chrome, options: options)
 end
