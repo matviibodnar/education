@@ -1,10 +1,7 @@
-name: Run RSpec with Capybara and Selenium
+name: Run Selenium Tests with RSpec and Allure
 
 on:
   push:
-    branches:
-      - main
-  pull_request:
     branches:
       - main
 
@@ -13,13 +10,13 @@ jobs:
     runs-on: ubuntu-latest
 
     steps:
-      - name: Check out repository
-        uses: actions/checkout@v3
+      - name: Checkout code
+        uses: actions/checkout@v2
 
       - name: Set up Ruby
-        uses: ruby/setup-ruby@v1
+        uses: ruby/setup-ruby@v3
         with:
-          ruby-version: '3.4'
+          ruby-version: 3.4
 
       - name: Install dependencies
         run: |
@@ -44,21 +41,17 @@ jobs:
             libdrm2 \
             libgtk-3-0
 
-      - name: Install dependencies and update chromedriver
+      - name: Install webdrivers gem and update chromedriver
         run: |
           gem install webdrivers
-          bundle install
           bundle exec ruby -r 'webdrivers/chromedriver' -e "Webdrivers::Chromedriver.update"
 
       - name: Run tests
         run: |
-          export CHROMEDRIVER_PATH=/usr/local/bin/chromedriver
-          webdrivers:chromedriver:update
           bundle exec rspec --tag ~slow --allure-results
-          
-      - name: Upload Allure Report to GitHub Pages
-        uses: peaceiris/actions-gh-pages@v3
-        with:
-          github_token: ${{ secrets.GITHUB_TOKEN }}
-          publish_dir: ./allure-report
 
+      - name: Upload Allure results
+        uses: actions/upload-artifact@v2
+        with:
+          name: allure-results
+          path: report/allure-results
