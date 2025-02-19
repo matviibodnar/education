@@ -10,6 +10,15 @@ Capybara.configure do |config|
   config.run_server = false
 end
 
+Capybara.register_driver :chrome do |app|
+  options = Selenium::WebDriver::Chrome::Options.new
+  options.add_argument('--no-sandbox')
+  options.add_argument('--disable-dev-shm-usage')
+  options.add_argument('--user-data-dir=/tmp/chrome-test-profile')
+
+  Capybara::Selenium::Driver.new(app, browser: :chrome, options: options)
+end
+
 AllureRspec.configure do |config|
   config.results_directory = 'report/allure-results'
   config.clean_results_directory = true
