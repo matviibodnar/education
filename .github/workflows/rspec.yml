@@ -1,35 +1,37 @@
-name: CI
+name: Run RSpec with Capybara & Selenium
 
 on:
   push:
     branches:
-      - main 
+      - main
   pull_request:
     branches:
-      - main  
+      - main
   workflow_dispatch:
-
+  
 jobs:
-  rspec:
+  test:
     runs-on: ubuntu-latest
 
-    container:
-      image: ruby:3.4
-
     steps:
-    - name: Checkout the repository
-      uses: actions/checkout@v2 
+    - name: Checkout code
+      uses: actions/checkout@v3
 
     - name: Set up Ruby
       uses: ruby/setup-ruby@v1
       with:
-        ruby-version: '3.4'
+        ruby-version: '3.4'  
 
     - name: Install dependencies
       run: |
         gem install bundler
-        bundle install --jobs 4 --retry 3 --path vendor/bundle
+        bundle install
+
+    - name: Install ChromeDriver
+      run: |
+        sudo apt-get update
+        sudo apt-get install -y chromium-chromedriver
 
     - name: Run RSpec tests
       run: |
-        bundle exec rspec ./spec/features/*
+        bundle exec rspec
