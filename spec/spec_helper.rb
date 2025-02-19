@@ -4,6 +4,7 @@ require 'capybara/rspec'
 require 'selenium-webdriver'
 require 'webdrivers'
 require 'allure-rspec'
+require 'tmpdir'
 
 Capybara.configure do |config|
   config.default_driver = :selenium_chrome
@@ -14,7 +15,9 @@ Capybara.register_driver :chrome do |app|
   options = Selenium::WebDriver::Chrome::Options.new
   options.add_argument('--no-sandbox')
   options.add_argument('--disable-dev-shm-usage')
-  options.add_argument('--user-data-dir=/tmp/chrome-test-profile')
+
+  user_data_dir = Dir.mktmpdir('chrome-test-profile-')
+  options.add_argument("--user-data-dir=#{user_data_dir}")
 
   Capybara::Selenium::Driver.new(app, browser: :chrome, options: options)
 end
