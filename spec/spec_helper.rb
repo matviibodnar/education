@@ -8,6 +8,9 @@ require 'allure-rspec'
 Capybara.configure do |config|
   config.default_driver = :selenium_chrome
   config.run_server = false
+  config.add_argument('--no-sandbox')
+  config.add_argument('--disable-dev-shm-usage')
+  config.add_argument('--disable-extensions')
 end
 
 AllureRspec.configure do |config|
