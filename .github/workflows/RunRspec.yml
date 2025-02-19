@@ -21,8 +21,8 @@ jobs:
       - name: Set up Ruby
         uses: ruby/setup-ruby@v1
         with:
-          ruby-version: '3.1'  # Use stable Ruby version (3.1.x)
-
+          ruby-version: '3.4'
+          
       - name: Install Dependencies
         run: bundle install
 
@@ -40,12 +40,12 @@ jobs:
           sudo chown root:root /usr/local/bin/chromedriver
           sudo chmod +x /usr/local/bin/chromedriver
           
-       - name: Set up headless Chrome for RSpec
+      - name: Set up headless Chrome for RSpec
         run: |
           echo "export DISPLAY=:99.0" >> $GITHUB_ENV  # Set DISPLAY for headless mode
           sudo apt-get install -y libx11-dev libgconf-2-4 libnss3 libatk1.0-0 libatk-bridge2.0-0 \
             libxcomposite1 libxrandr2 libgbm1 libasound2 libappindicator3-1 libxtst6 \
             xdg-utils fonts-liberation libappindicator3-1 libdbusmenu-glib4 libdbusmenu-gtk3-4
             
-       - name: Run RSpec tests
+      - name: Run RSpec tests
         run: bundle exec rspec ./spec/features/*
