@@ -1,62 +1,27 @@
-name: Ruby Tests with RSpec and Allure
+name: Run Rspec
 
 on:
-  push:
-    branches:
-      - main
   pull_request:
     branches:
-      - main
-  workflow_dispatch:  
+      - master
+  push:
+    branches:
+      - master
 
 jobs:
   test:
+    name: Test
     runs-on: ubuntu-latest
 
     steps:
-    - name: Checkout code
-      uses: actions/checkout@v2
+      - name: Checkout
+        uses: actions/checkout@master
 
-    - name: Set up Ruby
-      uses: ruby/setup-ruby@v1
-      with:
-        ruby-version: '3.4'
+      - name: Set up Ruby
+        uses: ruby/setup-ruby@v1
+        with:
+          ruby-version: '3.4'
+          bundler-cache: true
 
-    - name: Install dependencies
-      run: |
-        gem install bundler
-        bundle install  
-
-    - name: Install Google Chrome and ChromeDriver
-      run: |
-        sudo apt-get update
-        sudo apt-get install -y google-chrome-stable
-
-        CHROME_DRIVER_VERSION=$(curl -sS https://chromedriver.storage.googleapis.com/LATEST_RELEASE)
-        wget https://chromedriver.storage.googleapis.com/$CHROME_DRIVER_VERSION/chromedriver_linux64.zip
-        unzip chromedriver_linux64.zip
-        sudo mv chromedriver /usr/local/bin/chromedriver
-        sudo chown root:root /usr/local/bin/chromedriver
-        sudo chmod +x /usr/local/bin/chromedriver
-
-    - name: Install Allure
-      run: |
-        curl -sL https://github.com/allure-framework/allure2/releases/download/2.16.1/allure-2.16.1.zip -o allure.zip
-        unzip allure.zip -d allure
-        sudo mv allure /opt/allure
-        sudo ln -s /opt/allure/bin/allure /usr/local/bin/allure
-        allure --version
-
-    - name: Run RSpec tests with Allure formatter
-      run: |
-        bundle exec rspec ./spec/features/* --format AllureRspecFormatter --out allure-results
-
-    - name: Generate Allure report
-      run: |
-        allure generate allure-results --clean -o allure-report
-
-    - name: Upload Allure report as artifact
-      uses: actions/upload-artifact@v4
-      with:
-        name: allure-report
-        path: allure-report
+      - name: Test
+        run: bundle exec rspec ./spec/features/*
