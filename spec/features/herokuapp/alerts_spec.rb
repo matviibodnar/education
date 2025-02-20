@@ -1,7 +1,7 @@
 # frozen_string_literal: true
 
 require 'spec_helper'
-require_relative '../../../utils/alertutils'
+require_relative '../../../utils/herokuapp/alertutils'
 
 RSpec.feature 'Alerts tables', type: :feature do
   scenario 'Information alert' do
