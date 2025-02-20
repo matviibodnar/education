@@ -32,4 +32,14 @@ module AlertUtils
   def self.result_text
     Capybara.find('#result').text.gsub('You entered:', '').strip
   end
+
+  def self.wait_until_visible(locator, timeout = 2, retries = 5)
+    retries.times do
+      element = Capybara.find(locator, wait: timeout)
+      return element if element.visible?
+    rescue Capybara::ElementNotFound
+      sleep(2)
+    end
+    raise Capybara::ElementNotFound, "Element not visible after #{retries} retries"
+  end
 end
