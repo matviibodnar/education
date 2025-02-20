@@ -5,8 +5,8 @@ require_relative '../../../utils/logutils'
 require_relative '../../../utils/purchaseutils'
 require_relative '../../../utils/texts'
 
-RSpec.feature 'Happy purchase of backpack', type: :feature do
-  scenario 'Happy purchase of backpack' do
+RSpec.feature 'Random purchase', type: :feature do
+  scenario 'Random purchase' do
     amount_of_products = 3
     data = PurchaseUtils.random_products(amount_of_products)
 
