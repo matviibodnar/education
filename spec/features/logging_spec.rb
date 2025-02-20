@@ -22,4 +22,10 @@ RSpec.feature 'Home Page', type: :feature do
 
     expect(page).to have_text(Texts::LOGIN_ERROR_MESSAGE)
   end
+
+  scenario 'Locked user' do
+    LogUtils.login('locked_out_user')
+
+    expect(page).to have_text(Texts::LOCKED_USER)
+  end
 end
