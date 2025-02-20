@@ -108,4 +108,8 @@ module PurchaseUtils
     ]
     totals_lookup[number]
   end
+
+  def self.remove(index)
+    Capybara.all('button', text: 'Remove')[index].click
+  end
 end
