@@ -7,18 +7,16 @@ require_relative '../../../utils/texts'
 
 RSpec.feature 'Happy purchase of jacket', type: :feature do
   scenario 'Happy purchase of jacket' do
-    expected_values = {
-      item_total: 49.99,
-      tax_total: 4.0,
-      total: 53.99
-    }
+    product_id = 3
+
+    expected_values = PurchaseUtils.price_data(product_id)
 
     # Step 1: Visit homepage and login
     LogUtils.login
     expect(page).to have_text(Texts::MAIN_PAGE)
 
     # Step 2: Add item to cart and verify cart
-    PurchaseUtils.add_to_cart(3)
+    PurchaseUtils.add_to_cart(product_id)
     expect(PurchaseUtils.cart_value).to be 1
 
     PurchaseUtils.click_shopping_cart

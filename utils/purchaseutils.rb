@@ -73,4 +73,39 @@ module PurchaseUtils
     select = Capybara.find('select.product_sort_container')
     select.select(selector)
   end
+
+  def self.random_products(number)
+    numbers = []
+
+    numbers = Array.new(number) { rand(0..5) } while numbers.uniq.length < number
+    numbers.sort!.reverse!
+
+    expected_values = { item_total: 0, tax_total: 0, total: 0 }
+
+    numbers.each do |num|
+      product_data = price_data(num)
+
+      expected_values[:item_total] += product_data[:item_total]
+      expected_values[:tax_total] += product_data[:tax_total]
+      expected_values[:total] += product_data[:total]
+    end
+
+    expected_values.each do |key, value|
+      expected_values[key] = value.round(2)
+    end
+
+    { numbers: numbers, expected_values: expected_values }
+  end
+
+  def self.price_data(number)
+    totals_lookup = [
+      { item_total: 29.99, tax_total: 2.4, total: 32.39 },
+      { item_total: 9.99, tax_total: 0.8, total: 10.79 },
+      { item_total: 15.99, tax_total: 1.28, total: 17.27 },
+      { item_total: 49.99, tax_total: 4.0, total: 53.99 },
+      { item_total: 7.99, tax_total: 0.64, total: 8.63 },
+      { item_total: 15.99, tax_total: 1.28, total: 17.27 }
+    ]
+    totals_lookup[number]
+  end
 end
