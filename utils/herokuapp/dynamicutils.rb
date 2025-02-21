@@ -1,7 +1,7 @@
 # frozen_string_literal: true
 
-# utils/alertutils.rb
-module AlertUtils
+# utils/dynamicutils.rb
+module DynamiCutils
   def self.accept_alert
     alert = Capybara.page.driver.browser.switch_to.alert
     alert.accept
@@ -33,13 +33,20 @@ module AlertUtils
     Capybara.find('#result').text.gsub('You entered:', '').strip
   end
 
-  def self.wait_until_visible(locator, timeout = 2, retries = 5)
-    retries.times do
-      element = Capybara.find(locator, wait: timeout)
-      return element if element.visible?
-    rescue Capybara::ElementNotFound
+  def self.wait_until_visible(locator, timeout = 10, retries = 5)
+    retries.times do |_attempt|
+      begin
+        element = Capybara.find(locator, wait: timeout)
+        return element if element.visible? && !element.disabled?
+      rescue Capybara::ElementNotFound
+      end
       sleep(2)
     end
-    raise Capybara::ElementNotFound, "Element not visible after #{retries} retries"
+    raise Capybara::ElementNotFound,
+          "Element '#{locator}' not visible or interactable"
+  end
+
+  def self.click_checkbox
+    Capybara.find('input[type="checkbox"]').click
   end
 end
