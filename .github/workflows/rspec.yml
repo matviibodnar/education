@@ -1,4 +1,4 @@
-name: Run Selenium Tests with RSpec and Allure   
+name: Run Tests with RSpec and Allure
 
 on:
   push:
@@ -10,12 +10,12 @@ on:
   workflow_dispatch:
 
 jobs:
-  rubocop:
+  test_and_report:
     runs-on: ubuntu-latest
 
     steps:
       - name: Checkout code
-        uses: actions/checkout@v2
+        uses: actions/checkout@v4
 
       - name: Set up Ruby
         uses: ruby/setup-ruby@v1
@@ -50,6 +50,26 @@ jobs:
           gem install webdrivers
           bundle exec ruby -r 'webdrivers/chromedriver' -e "Webdrivers::Chromedriver.update"
 
-      - name: Run tests
+      - name: Run RSpec tests and generate Allure results
         run: |
-          bundle exec rspec
+          mkdir -p report/allure-results
+          bundle exec rspec --format AllureRspec::Formatter
+
+      - name: Install Allure CLI
+        uses: simple-elf/allure-report-action@master
+        with:
+          allure_version: 2.24.0
+
+      - name: Generate Allure report
+        run: |
+          allure generate report/allure-results --clean -o report/allure-report
+
+      - name: Upload Allure report as artifact
+        uses: actions/upload-artifact@v4
+        with:
+          name: allure-report
+          path: report/allure-report
+
+      - name: Display Allure report summary (optional)
+        run: |
+          allure report open report/allure-report
