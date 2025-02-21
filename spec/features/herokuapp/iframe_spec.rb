@@ -10,7 +10,9 @@ RSpec.feature 'Iframe', type: :feature do
 
     find(".tox-notification__dismiss").click
 
-    expect(page.text).to eql?(IFRAME)
+    expect(page.text).to have_text(Texts::IFRAME)
+
+    expect((all(".tox")[0].text)). to have_text(Texts::IFRAME_TABS)
   end
   scenario 'Check URL on the last tab' do
     visit 'https://the-internet.herokuapp.com/tinymce'
