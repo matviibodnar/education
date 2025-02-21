@@ -8,8 +8,9 @@ RSpec.feature 'Modals', type: :feature do
   scenario 'Check and accept' do
     visit 'https://the-internet.herokuapp.com/entry_ad'
 
+    DynamiCutils.wait_until_visible('#modal', 2, 10)
     expect(find_by_id('modal').text).to eq(Texts::MODAL_TEXT)
 
-    click_button 'Close'
+    find('p', text: 'Close').click
   end
 end
