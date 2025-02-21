@@ -1,7 +1,7 @@
 # frozen_string_literal: true
 
 require 'spec_helper'
-require_relative '../../../utils/herokuapp/alertutils'
+require_relative '../../../utils/herokuapp/dynamicutils'
 require_relative '../../../utils/texts'
 
 RSpec.feature 'Modals', type: :feature do
