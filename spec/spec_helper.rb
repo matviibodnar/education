@@ -18,11 +18,10 @@ Capybara.register_driver :selenium_chrome_headless do |app|
   options.add_argument('--disable-dev-shm-usage')
 
   user_data_dir = Dir.mktmpdir("chrome-test-profile-#{SecureRandom.hex(8)}")
-  at_exit { FileUtils.remove_entry_secure(user_data_dir) }
   options.add_argument("--user-data-dir=#{user_data_dir}")
 
   at_exit do
-    FileUtils.remove_entry(user_data_dir) if Dir.exist?(user_data_dir)
+    FileUtils.remove_entry_secure(user_data_dir) if Dir.exist?(user_data_dir)
   end
 
   Capybara::Selenium::Driver.new(app, browser: :chrome, options: options)
