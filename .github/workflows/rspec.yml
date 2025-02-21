@@ -1,4 +1,4 @@
-name: Run Tests with RSpec and Allure
+name: Run Selenium Tests with RSpec and Allure
 
 on:
   push:
@@ -25,7 +25,7 @@ jobs:
       - name: Install dependencies
         run: |
           gem install bundler
-          bundle install
+          bundle install --jobs 4 --retry 3 # Ensure all gems are installed
 
       - name: Install Chrome dependencies
         run: |
@@ -69,7 +69,3 @@ jobs:
         with:
           name: allure-report
           path: report/allure-report
-
-      - name: Display Allure report summary (optional)
-        run: |
-          allure report open report/allure-report
