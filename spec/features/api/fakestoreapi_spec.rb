@@ -2,7 +2,7 @@
 
 require 'spec_helper'
 
-require_relative '../../../utils/ApiUtils'
+require_relative '../../utils/ApiUtils'
 
 RSpec.feature 'Basic API interactions', type: :feature do
   it 'Basic API interactions' do
