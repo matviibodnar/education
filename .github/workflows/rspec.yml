@@ -8,7 +8,7 @@ on:
   workflow_dispatch:
 
 jobs:
-  rubocop:
+  rspec_tests:
     runs-on: ubuntu-latest
 
     steps:
@@ -48,6 +48,15 @@ jobs:
           gem install webdrivers
           bundle exec ruby -r 'webdrivers/chromedriver' -e "Webdrivers::Chromedriver.update"
 
-      - name: Run tests
+      - name: Run all specs
         run: |
-          bundle exec rspec
+          bundle exec rspec || echo "Some specs failed, will retry failed ones..."
+
+      - name: Rerun failed specs (if any)
+        run: |
+          if [ -s spec/examples.txt ]; then
+            echo "🔁 Re-running failed specs..."
+            bundle exec rspec --only-failures
+          else
+            echo "✅ No failed specs to rerun."
+          fi

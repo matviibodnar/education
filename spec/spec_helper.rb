@@ -29,6 +29,10 @@ Capybara.register_driver :selenium_chrome_headless do |app|
   Capybara::Selenium::Driver.new(app, browser: :chrome, options: options)
 end
 
+RSpec.configure do |config|
+  config.example_status_persistence_file_path = 'spec/examples.txt'
+end
+
 AllureRspec.configure do |config|
   config.results_directory = 'report/allure-results'
   config.clean_results_directory = true

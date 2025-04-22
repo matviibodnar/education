@@ -9,3 +9,5 @@ tmp/*
 
 report/
 allure-report
+
+spec/spec_helper.rb
