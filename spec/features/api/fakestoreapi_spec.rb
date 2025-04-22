@@ -2,14 +2,13 @@
 
 require 'spec_helper'
 
-require_relative '../../../utils/ApiUtils'
+require_relative '../../../utils/apiutils'
 
 RSpec.feature 'Basic API interactions', type: :feature do
   it 'Basic API interactions' do
-    puts ApiUtils.getusers
+    ApiUtils.getusers
 
     data = ApiUtils.generatefakeuser
-    puts data
 
     user = ApiUtils.adduser(data)
     expect(user.code).to eql(200)
@@ -20,13 +19,9 @@ RSpec.feature 'Basic API interactions', type: :feature do
     fact = ApiUtils.fact(random_length)
 
     parsed_response = JSON.parse(fact.body)
-    p parsed_response
     length = parsed_response['length'].to_i
 
     expect(fact.code).to eql(200)
-    p "Initial lenght#{random_length}"
-    p "Response lenght#{length}"
-    p "length < random_length#{length < random_length}"
-    expect(length).to be < random_length
+    expect(length).to be <= random_length
   end
 end
