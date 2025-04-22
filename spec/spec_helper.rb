@@ -5,6 +5,8 @@ require 'selenium-webdriver'
 require 'webdrivers'
 require 'allure-rspec'
 require 'tmpdir'
+require 'httparty'
+require 'faker'
 
 Capybara.configure do |config|
   config.default_driver = :selenium_chrome_headless
